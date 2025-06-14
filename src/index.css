@@ -491,7 +491,7 @@ form button span::selection {
 /* HASHTAGS */
 .hashtags {
   position: absolute;
-  right: -107px;
+  right: -130px;
   top: 10px;
 }
 
@@ -555,8 +555,8 @@ footer > small > a {
   top: 46%;
   transform: translateX(-50%) translateZ(0);
   border-radius: 50%;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border-top: 7px solid #e2e7e9;
   border-right: 7px solid #e2e7e9;
   border-bottom: 7px solid #e2e7e9;
