@@ -3,7 +3,9 @@ export default function Footer() {
     <footer>
       <small>
         Made with 💜 by{" "}
-        <a href="https://github.com/krifa-med-aziz">Mohamed Aziz Krifa</a>
+        <a href="https://github.com/krifa-med-aziz" target="_blank">
+          Mohamed Aziz Krifa
+        </a>
       </small>
     </footer>
   );

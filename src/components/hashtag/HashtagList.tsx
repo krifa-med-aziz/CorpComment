@@ -2,11 +2,16 @@ import { useFeedbackItemsStore } from "../../stores/FeedbackStore";
 import Hastag from "./Hastag";
 
 export default function HashtagList() {
-  const getCompanyList = useFeedbackItemsStore((state) => state.getCompanyList);
+  const feedbackItems = useFeedbackItemsStore((state) => state.feedbackItems);
   const handleSelectCompany = useFeedbackItemsStore(
     (state) => state.selectCompany
   );
-  const companyList = getCompanyList();
+  const isLoading = useFeedbackItemsStore((state) => state.isLoading);
+  if (isLoading) return;
+  const companyList = feedbackItems
+    .map((item) => item.company)
+    .filter((company, index, array) => array.indexOf(company) === index);
+
   return (
     <ul className="hashtags">
       {companyList.map((company) => (

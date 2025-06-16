@@ -1,19 +1,21 @@
 import { create } from "zustand";
 import type { TFeedbackItem } from "../lib/types";
 
-export const useFeedbackItemsStore = create((set, get) => ({
+type Store = {
+  feedbackItems: TFeedbackItem[];
+  isLoading: boolean;
+  errorMessage: string;
+  selectedCompany: string;
+  addItem: (text: string) => Promise<void>;
+  selectCompany: (companyName: string) => void;
+  fetchfedbackItems: () => Promise<void>;
+};
+
+export const useFeedbackItemsStore = create<Store>((set) => ({
   feedbackItems: [],
   isLoading: false,
   errorMessage: "",
   selectedCompany: "",
-  getCompanyList: () => {
-    const state = get();
-    return state.feedbackItems
-      .map((feedback) => feedback.company)
-      .filter((company, index, array) => {
-        return array.indexOf(company) === index;
-      });
-  },
   addItem: async (text: string) => {
     const companyName =
       text
@@ -54,16 +56,8 @@ export const useFeedbackItemsStore = create((set, get) => ({
       if (!response.ok) throw new Error();
       const data = await response.json();
       set(() => ({ isLoading: false, feedbackItems: data.feedbacks }));
-    } catch (error) {
+    } catch {
       set(() => ({ errorMessage: "Somethin went wrong!", isLoading: false }));
     }
-  },
-  getFilteredFeedbackItems: () => {
-    const state = get();
-    return state.selectedCompany
-      ? state.feedbackItems.filter(
-          (item) => item.company === state.selectedCompany
-        )
-      : state.feedbackItems;
   },
 }));
