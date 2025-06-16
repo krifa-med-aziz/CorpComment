@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MAX_CHARACTERS } from "../../lib/constants";
+import { MAX_CHARACTERS, MIN_CHARACTERS } from "../../lib/constants";
 
 type FeedbackFormprops = {
   handleAddItem: (text: string) => void;
@@ -11,7 +11,7 @@ export default function FeedbackForm({ handleAddItem }: FeedbackFormprops) {
   const [showInValidIndicator, setShowInValidIndicator] = useState(false);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (text.includes("#") && text.length >= 10) {
+    if (text.includes("#") && text.length >= MIN_CHARACTERS) {
       setShowValidIndicator(true);
       setTimeout(() => setShowValidIndicator(false), 2000);
     } else {

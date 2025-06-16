@@ -1,12 +1,11 @@
+import { useFeedbackItemsStore } from "../../stores/FeedbackStore";
 import FeedbackForm from "../feedback/FeedbackForm";
 import Logo from "../Logo";
 import PageHeading from "../PageHeading";
 import Pattern from "../Pattern";
-type Headerprops = {
-  handleAddItem: (text: string) => void;
-};
 
-export default function Header({ handleAddItem }: Headerprops) {
+export default function Header() {
+  const handleAddItem = useFeedbackItemsStore((state) => state.addItem);
   return (
     <header>
       <Pattern />

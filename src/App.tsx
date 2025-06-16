@@ -1,93 +1,20 @@
-import { useEffect, useMemo, useState } from "react";
 import Container from "./components/layout/Container";
 import Footer from "./components/layout/Footer";
 import HashtagList from "./components/hashtag/HashtagList";
-import type { TFeedbackItem } from "./lib/types";
+import { useEffect } from "react";
+import { useFeedbackItemsStore } from "./stores/FeedbackStore";
 
 function App() {
-  const [feedbackItems, setFeedbackItems] = useState<TFeedbackItem>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [selectedCompany, setSelectedCompany] = useState("");
-  const companyList = useMemo(
-    () =>
-      feedbackItems
-        .map((feedback) => feedback.company)
-        .filter((company, index, array) => {
-          return array.indexOf(company) === index;
-        }),
-    [feedbackItems]
+  const fetchfedbackItems = useFeedbackItemsStore(
+    (state) => state.fetchfedbackItems
   );
-  const handleSelectCompany = (companyName: string) => {
-    setSelectedCompany(companyName);
-  };
-  const filteredFeedbackItems = useMemo(
-    () =>
-      selectedCompany
-        ? feedbackItems.filter((item) => item.company === selectedCompany)
-        : feedbackItems,
-    [feedbackItems, selectedCompany]
-  );
-  const handleAddItem = async (text: string) => {
-    const companyName =
-      text
-        .split(" ")
-        .find((word) => word.includes("#"))!
-        .substring(1) || "unknown";
-    const newItem: TFeedbackItem = {
-      id: new Date().getDate(),
-      text: text,
-      upvoteCount: 0,
-      daysAgo: 0,
-      company: companyName,
-      badgeLetter: companyName.substring(0, 1).toUpperCase(),
-    };
-    setFeedbackItems([...feedbackItems, newItem]);
-
-    await fetch(
-      "https://bytegrad.com/course-assets/projects/corpcomment/api/feedbacks",
-      {
-        method: "POST",
-        body: JSON.stringify(newItem),
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json",
-        },
-      }
-    );
-  };
-
   useEffect(() => {
-    const fetchfedbackItems = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          "https://bytegrad.com/course-assets/projects/corpcomment/api/feedbacks"
-        );
-        if (!response.ok) throw new Error();
-        const data = await response.json();
-        setIsLoading(false);
-        setFeedbackItems(data.feedbacks);
-      } catch (error) {
-        setErrorMessage("Somethin went wrong!");
-        setIsLoading(false);
-      }
-    };
     fetchfedbackItems();
-  }, []);
-
+  }, [fetchfedbackItems]);
   return (
     <div className="app">
-      <Container
-        isLoading={isLoading}
-        feedbackItems={filteredFeedbackItems}
-        errorMessage={errorMessage}
-        handleAddItem={handleAddItem}
-      />
-      <HashtagList
-        companyList={companyList}
-        handleSelectCompany={handleSelectCompany}
-      />
+      <Container />
+      <HashtagList />
       <Footer />
     </div>
   );
